@@ -61,6 +61,41 @@ public class TestInteger implements Comparable<TestInteger> {
 
     }
 
+    public static void randomQuicksort(TestInteger[] arr, int first, int last) {
+
+        if (last-first <= 1) {
+            return;
+        }
+
+        Random random = new Random();
+        int pivotIndex = first;
+        // pick a random pivot between first and last
+        int i = random.nextInt(last-first) + first;
+        // put the pivot value in the first spot
+        TestInteger pivotValue = arr[i];
+        arr[i] = arr[first];
+        arr[first] = pivotValue;
+
+        int firstUnknown = pivotIndex+1;
+
+        while(firstUnknown<last) {
+            if (arr[firstUnknown].compareTo(pivotValue)<0) {
+                pivotIndex++;
+                TestInteger tmp = arr[pivotIndex];
+                arr[pivotIndex] = arr[firstUnknown];
+                arr[firstUnknown] = tmp;
+            }
+            firstUnknown++;
+        }
+        arr[first] = arr[pivotIndex];
+        arr[pivotIndex] = pivotValue;
+
+        quicksort(arr, first, pivotIndex);
+        quicksort(arr, pivotIndex+1, last);
+
+    }
+
+
     public static void main(String[] args) {
 
         Random random = new Random();
@@ -84,7 +119,7 @@ public class TestInteger implements Comparable<TestInteger> {
         TestInteger.counter = 0;
 
         // Sort with quicksort
-        TestInteger.quicksort(arr2, 0, arr2.length);
+        TestInteger.randomQuicksort(arr2, 0, arr2.length);
         System.out.println("Number of comparisons using quicksort for random numbers: " + TestInteger.counter);
         isSorted(arr2);
         TestInteger.counter = 0;
@@ -95,7 +130,7 @@ public class TestInteger implements Comparable<TestInteger> {
         TestInteger.counter = 0;
 
         // Sort with quicksort on a sorted array
-        TestInteger.quicksort(arr2, 0, arr2.length);
+        TestInteger.randomQuicksort(arr2, 0, arr2.length);
         System.out.println("Number of comparisons using quicksort for sorted numbers: " + TestInteger.counter);
         isSorted(arr2);
         TestInteger.counter = 0;
